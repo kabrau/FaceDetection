@@ -1,0 +1,2 @@
+label_map_path: 'E:/GitHub/FaceDetection/SSD/config/classes.pbtxt'
+tf_record_input_reader: { input_path: 'e:/GitHub/FaceDetection/SSD/out/valid_detections.tfrecord-00000-of-00001' }

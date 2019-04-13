@@ -1,0 +1,48 @@
+# Exporta do formato original para o formato da ferramenta
+python importFromTxtGT_01.py -p E:/datasets/FaceDataset/Wider/WIDER_train/images/ -f E:/datasets/FaceDataset/Wider/wider_face_split/wider_face_train_bbx_gt.txt
+python importFromTxtGT_01.py -p E:/datasets/FaceDataset/Wider/WIDER_val/images/ -f E:/datasets/FaceDataset/Wider/wider_face_split/wider_face_val_bbx_gt.txt
+
+# Exporta para o formato PASCAL
+python ExportToPascal.py -p E:\datasets\FaceDataset\Wider\WIDER_train\images\ -a E:\datasets\FaceDataset\Wider\WIDER_train\train.ann -className face -s
+python ExportToPascal.py -p E:\datasets\FaceDataset\Wider\WIDER_val\images\ -a E:\datasets\FaceDataset\Wider\WIDER_val\val.ann -className face -s
+
+# Exporta para o formato CSV
+python ExportPascal2csv.py -p E:\datasets\FaceDataset\Wider\WIDER_train\train.ann -o E:\datasets\FaceDataset\Wider\WIDER_train\train.csv -a
+python ExportPascal2csv.py -p E:\datasets\FaceDataset\Wider\WIDER_val\val.ann -o E:\datasets\FaceDataset\Wider\WIDER_val\val.csv -a
+
+# Exporta para o formato TENSORFLOW
+python Generate_TFRecord.py --csv_input=E:\datasets\FaceDataset\Wider\WIDER_train\train.csv  --output_path=E:\datasets\FaceDataset\Wider\WIDER_train\train.record 
+python Generate_TFRecord.py --csv_input=E:\datasets\FaceDataset\Wider\WIDER_val\val.csv  --output_path=E:\datasets\FaceDataset\Wider\WIDER_val\val.record 
+
+#cria a pasta config e adiciona o arquivo de classes e o arquivo de treinamento: 
+- classes.pbtxt
+- ssd_inception_v2_coco_3C.config
+
+PS: ajuste as classes e pastas
+/datasets/FaceDataset/Wider/WIDER_train/train.record
+/datasets/FaceDataset/Wider/WIDER_train/val.record
+/GitHub/FaceDetection/SSD/config/classes.pbtxt
+/GitHub/FaceDetection/SSD/config/ssd_inception_v2_coco_3C.config
+
+#Treinamento 
+Vai na pasta e:\GitHub
+Execute:
+- cmdTensorFlow.bat
+- cmdTensorFlow-ObjectDetection.bat
+
+python train.py --logtostderr --train_dir=E:/GitHub/FaceDetection/SSD/training/ --pipeline_config_path=e:/GitHub/FaceDetection/SSD/config/ssd_inception_v2_coco.config
+
+tensorboard --logdir training
+
+http://DESKTOP-KABRAU:6006
+
+
+#predict
+##não funcionou
+##python eval.py --logtostderr --pipeline_config_path=e:/GitHub/FaceDetection/SSD/config/ssd_inception_v2_coco.config  --checkpoint_dir=E:/GitHub/FaceDetection/SSD/inference/ --eval_dir=E:/GitHub/FaceDetection/SSD/eval/
+
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path e:/GitHub/FaceDetection/SSD/config/ssd_inception_v2_coco.config --trained_checkpoint_prefix E:/GitHub/FaceDetection/SSD/training/model.ckpt-21373 --output_directory E:/GitHub/FaceDetection/SSD/inference/
+
+python ./inference/infer_detections.py --input_tfrecord_paths=E:/datasets/FaceDataset/Wider/WIDER_val/val.record --output_tfrecord_path=E:/GitHub/FaceDetection/SSD/out/valid_detections.tfrecord-00000-of-00001 --inference_graph=E:/GitHub/FaceDetection/SSD/inference/frozen_inference_graph.pb --discard_image_pixels
+
+python ./metrics/offline_eval_map_corloc.py --eval_dir=e:/GitHub/FaceDetection/SSD/eval_metrics/ --eval_config_path=e:/GitHub/FaceDetection/SSD/eval_metrics/eval_config.pbtxt --input_config_path=e:/GitHub/FaceDetection/SSD/eval_metrics/valid_input_config.pbtxt
