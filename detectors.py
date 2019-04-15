@@ -57,7 +57,7 @@ class CascadeDetector:
             frame = imutils.resize(image, width=self.imageSize)
         else:
             frame = image.copy()
-        # detect faces in the grayscale frame]
+        # detect faces in the grayscale frame
         rects = self.detector.detectMultiScale(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
         # transform relative position
