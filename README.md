@@ -7,6 +7,12 @@ https://youtu.be/UOHbKHGze2U
 **Post:**
 https://medium.com/@kabrau/detec%C3%A7%C3%A3o-de-faces-com-ssd-e-haar-cascade-para-desfocar-as-faces-em-imagens-5532184bcd89
 
+
+**WebCanmTest.py:** Predict faces from WebCam   
+**test.py:** Predict faces from samples folder   
+**BlurImages.py:** Blur faces from a folder   
+
+
 ## Cascade 
 **Origem:**
 https://www.learnopencv.com/face-detection-opencv-dlib-and-deep-learning-c-python/
