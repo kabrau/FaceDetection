@@ -47,13 +47,13 @@ while True:
 		boxesSSD = detectorSSD.Detect(frame)
 	
 	if useCascade:
-		tools.PrintBoxes(original_frame, boxesCascade,  (0,255,0), "Cascade" )
+		tools.PrintBoxes(frame, boxesCascade,  (0,255,0), "Cascade" )
 	if useSSD:
-		tools.PrintBoxes(original_frame, boxesSSD, (255,0,0), "SSD" )
+		tools.PrintBoxes(frame, boxesSSD, (255,0,0), "SSD" )
  
 	# show the output frame
-	original_frame = imutils.resize(original_frame, width=1080)
-	cv2.imshow("Frame", original_frame)
+	frame = imutils.resize(frame, width=1080)
+	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
  
 	# if the `o` key was pressed, write the *original* frame to disk
